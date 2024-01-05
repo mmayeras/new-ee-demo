@@ -27,5 +27,5 @@ additional_build_steps:
    - RUN rm /etc/pki/entitlement-host && mkdir /etc/pki/entitlement-host
    - ADD _build/certs/ /etc/pki/entitlement-host/
  prepend_galaxy:
-   - ADD _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+   - ADD /etc/ansible.cfg /etc/ansible/ansible.cfg
    - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.enabled=true --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.sslcacert=/etc/rhsm-host/ca/redhat-uep.pem"
