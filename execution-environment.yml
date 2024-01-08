@@ -13,8 +13,10 @@ options:
   package_manager_path: /usr/bin/microdnf
 
 additional_build_files:
+   # Mounted as secret to install packages from Red Hat repositories
    - src: /etc/pki/entitlement-host/
      dest: certs
+    # Mounted as secret to install packages from Red Hat Automation Hub
    - src: /etc/ansible.cfg
      dest: config
 
