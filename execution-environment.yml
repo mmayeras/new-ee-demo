@@ -1,0 +1,35 @@
+---
+version: 3
+images:
+  base_image:
+    name: 'registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest'
+
+dependencies:
+  galaxy: ./requirements.yml
+  python: ./requirements.txt
+  system: ./bindep.txt
+
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_files:
+   # Mounted as secret to install packages from Red Hat repositories
+   - src: /etc/pki/entitlement-host/
+     dest: certs
+    # Mounted as secret to install packages from Red Hat Automation Hub
+   - src: /etc/ansible.cfg
+     dest: config
+
+additional_build_steps:
+  #https://access.redhat.com/solutions/7024259 
+ prepend_builder:
+   - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.enabled=true --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.sslcacert=/etc/rhsm-host/ca/redhat-uep.pem"
+ prepend_final:
+   - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.enabled=true --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.sslcacert=/etc/rhsm-host/ca/redhat-uep.pem"
+ prepend_base:
+   - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.enabled=true --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.sslcacert=/etc/rhsm-host/ca/redhat-uep.pem"
+   - RUN rm /etc/pki/entitlement-host && mkdir /etc/pki/entitlement-host
+   - ADD _build/certs/ /etc/pki/entitlement-host/
+ prepend_galaxy:
+   - ADD _build/config/ansible.cfg /etc/ansible/ansible.cfg
+   - ENV PKGMGR_OPTS="--nodocs --setopt=install_weak_deps=0 --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.enabled=true --setopt=rhocp-4.12-for-rhel-9-x86_64-rpms.sslcacert=/etc/rhsm-host/ca/redhat-uep.pem"

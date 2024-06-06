@@ -1,0 +1,7 @@
+---
+collections:
+  - community.general
+  - community.kubernetes
+  - infra.controller_configuration
+  - redhat.openshift
+  - ansible.controller
